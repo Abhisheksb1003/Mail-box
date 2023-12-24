@@ -1,10 +1,12 @@
 import React, { Fragment } from "react";
 import ComposeForm from "./ComposeForm";
+import Inbox from "./Inbox";
 
 const Home = () => {
   return (
     <Fragment>
-      <ComposeForm />
+      {/* <ComposeForm /> */}
+      <Inbox />
     </Fragment>
   );
 };
