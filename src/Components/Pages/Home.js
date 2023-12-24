@@ -1,9 +1,10 @@
 import React, { Fragment } from "react";
+import ComposeForm from "./ComposeForm";
 
 const Home = () => {
   return (
     <Fragment>
-      <h1>Welcome To Mail Login Page</h1>
+      <ComposeForm />
     </Fragment>
   );
 };

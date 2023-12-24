@@ -11,17 +11,13 @@ const AuthPage = () => {
   let enteredpwd = useRef();
   let reenteredpwd = useRef();
   let history = useHistory();
-
   const submitHandler = (e) => {
     e.preventDefault();
-
     // Check if passwords match
     let renterdpwd; // Declare renterdpwd outside the block
-
     if (!loginsignup) {
       renterdpwd = reenteredpwd.current.value; // Assign value inside the block
     }
-
     if (loginsignup) {
       fetch(
         "https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyA20QgzIbGGBJE2GjAckzUje0TsQ023o2M",
@@ -41,6 +37,12 @@ const AuthPage = () => {
           } else {
             throw new Error("error while login");
           }
+          return res.json();
+        })
+        .then((data) => {
+          let sentemail = data.email;
+          let updatedemail = sentemail.replace(/[@.]/g, "");
+          localStorage.setItem("loginemail", updatedemail);
         })
         .catch((err) => {
           console.log(err);
@@ -74,11 +76,9 @@ const AuthPage = () => {
         });
     }
   };
-
   const loginorsignupbtnHandler = () => {
     setloginsignup((preValue) => !preValue);
   };
-
   return (
     <Fragment>
       <Container>
