@@ -1,7 +1,6 @@
 import React, { Fragment } from "react";
 import ComposeForm from "./ComposeForm";
 import Inbox from "./Inbox";
-import SidePanel from "./SidePanel";
 
 const Home = () => {
   return (
