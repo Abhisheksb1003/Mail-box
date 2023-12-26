@@ -1,14 +1,48 @@
-import React from "react";
-import { Navbar, Container } from "react-bootstrap";
+import React, {useEffect} from "react";
+import { Navbar, Container,Button,Image } from "react-bootstrap";
 import "bootstrap/dist/css/bootstrap.css";
+import { useDispatch, useSelector } from "react-redux";
+import { Authaction } from "../../Store/AuthSlice";
+import { useHistory } from "react-router-dom";
+import gmail from '../../Assets/gmaillogo1.png'
+import logout from '../../Assets/logoutbtn.png'
 
 const Headers = () => {
+  const dispatch = useDispatch();
+  const history = useHistory();
+  const isloggedin = useSelector((state) => state.auth.islogged);
+
+  useEffect(() => {
+    const email = localStorage.getItem("loginemail");
+    if (email) {
+      dispatch(Authaction.login());
+    }
+  });
+
+  const logoutbtnHandler = () => {
+    dispatch(Authaction.logout());
+    history.replace("/auth");
+  };
   return (
     <Navbar bg="dark">
       <Container className="d-flex ">
-        <Navbar.Brand href="#" className="text-white">
+        {/* <Navbar.Brand href="#" className="text-white">
           Header Component
-        </Navbar.Brand>
+        </Navbar.Brand> */}
+        <Image
+          src={gmail}
+          style={{ marginLeft: "100px" }}
+          alt="Gmail Logo"
+          className="gmail-logo"
+        />
+        {isloggedin && (
+          <Button
+            onClick={logoutbtnHandler}
+            style={{ background: "none", border: "none" }}
+          >
+            <Image src={logout} alt="logout" />
+          </Button>
+        )}
       </Container>
     </Navbar>
   );

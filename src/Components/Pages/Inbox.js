@@ -8,14 +8,13 @@ import { Link } from "react-router-dom";
 
 const Inbox = () => {
   let dispatch = useDispatch();
-
-
+ 
   useEffect(() => {
     const fetchData = async () => {
       try {
         let email = localStorage.getItem("loginemail").replace(/[@.]/g, "");
         const response = await fetch(
-          `https://expensetracker-7313d-default-rtdb.firebaseio.com/received/${email}.json`
+          `https://expensetracker-9c3dc-default-rtdb.firebaseio.com/received/${email}.json`
         );
         if (!response.ok) {
           throw new Error(`Error fetching data. Status: ${response.status}`);
@@ -32,15 +31,22 @@ const Inbox = () => {
         console.error("Error fetching data:", error);
       }
     };
+
     fetchData();
+        // Fetch data every 2 minutes (120,000 milliseconds)
+        const intervalId = setInterval(fetchData, 2000);
+        console.log('Interval set up.');
+        // Cleanup the interval when the component unmounts
+        return () =>{ clearInterval(intervalId);  console.log('Interval cleared.');}
   }, [dispatch]);
+
   const data = useSelector((state) => state.email.receivedemaildata);
   console.log("reducer data", data);
   const messageinfoHandler = (item) => {
     console.log("card clicked");
     let email = localStorage.getItem("loginemail").replace(/[@.]/g, "");
     fetch(
-      `https://expensetracker-7313d-default-rtdb.firebaseio.com/received/${email}/${item.id}.json`,
+      `https://expensetracker-9c3dc-default-rtdb.firebaseio.com/received/${email}/${item.id}.json`,
       {
         method: "PATCH",
         headers: {
@@ -57,7 +63,7 @@ const Inbox = () => {
           dispatch(
             emailAction.receivedemail(
               data.map((i) =>
-                i.id === item.id ? { ...i, messageread: false } : i
+                i.id === item.id ? { ...i, messageread: true } : i
               )
             )
           );
@@ -75,7 +81,7 @@ const Inbox = () => {
   const deleteHandler = (id) => {
     let email = localStorage.getItem("loginemail").replace(/[@.]/g, "");
     fetch(
-      `https://expensetracker-7313d-default-rtdb.firebaseio.com/received/${email}/${id}.json`,
+      `https://expensetracker-9c3dc-default-rtdb.firebaseio.com/received/${email}/${id}.json`,
       {
         method: "DELETE",
         headers: {
